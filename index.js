@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 80; 
 const config = require('./config.json');
 
-const url = 'https://api.av.by/offer-types/cars/filters/main/init?place_region[0]=1005&price_currency=2&price_usd[max]=10000&seller_type[0]=1&sort=4';
+const url = 'https://api.av.by/offer-types/cars/filters/main/init?place_city[0]=2&place_region[0]=1005&price_currency=2&price_usd[max]=10000&seller_type[0]=1&sort=4';
 let previousAdId = null; // Переменная для хранения предыдущего id объявления
 
 app.listen(PORT, () => {
@@ -18,6 +18,7 @@ async function avParser() {
     const regCountryValue = response.data.adverts[0].properties.find(obj => obj.id === 22)?.value;
     const isAdNew = response.data.adverts[0].originalDaysOnSale === 1;
     const isTop = response.data.adverts[0].top;
+    const currentPrice = response.data.adverts[0].price.usd.amount;
     if (adId !== previousAdId && 
       regCountryValue !== "регистрация РФ" &&
       isAdNew &&
@@ -35,7 +36,7 @@ async function avParser() {
         const mediumPrice = additionalResponse.data.mediumPrice.priceUsd;
         const mediumPriceMessage = mediumPrice !== 0 ? `Средняя цена: ${mediumPrice} USD` : "Средняя цена неизвестна";
         // Посылаем ссылку в телеграмм-бот
-        sendMsg(`${adLink}\n${mediumPriceMessage}`);
+        if (currentPrice < mediumPrice || mediumPrice == 0) sendMsg(`${adLink}\n${mediumPriceMessage}`);
         console.log(mediumPriceMessage)
       } catch (error) {
         console.error('Ошибка при выполнении дополнительного запроса на среднюю цену:', error);
