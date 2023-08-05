@@ -18,7 +18,7 @@ async function avParser(url) {
         !isTop
         ) { // Сравниваем текущий и предыдущий id объявления
   
-        console.log("ID:",adId, "Регистрация: ", regCountryValue || "Свойство с id равным 22 не найдено."); // Выводим id только при появлении нового объявления
+        console.log("av.by: ID",adId, "Регистрация: ", regCountryValue || "Свойство с id равным 22 не найдено."); // Выводим id только при появлении нового объявления
         const adLink = response.data.adverts[0].publicUrl
   
         // Дополнительный запрос для получения средней цены
@@ -29,7 +29,7 @@ async function avParser(url) {
           const mediumPrice = additionalResponse.data.mediumPrice.priceUsd;
           const mediumPriceMessage = mediumPrice !== 0 ? `Средняя цена: ${mediumPrice} USD` : "Средняя цена неизвестна";
           // Посылаем ссылку в телеграмм-бот
-          if (currentPrice < mediumPrice || mediumPrice == 0) sendMsg(`${adLink}\n${mediumPriceMessage}`);
+          if (currentPrice < mediumPrice || mediumPrice == 0) //sendMsg(`${adLink}\n${mediumPriceMessage}`);
           console.log(mediumPriceMessage)
         } catch (error) {
           console.error('Ошибка при выполнении дополнительного запроса на среднюю цену:', error);

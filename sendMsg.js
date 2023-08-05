@@ -1,7 +1,9 @@
-const axios =require('axios')
+const axios =require('axios');
+const config = require('./config.json');
+
+const urlTelegram = 'https://api.telegram.org/bot' + config.telegram.token + '/sendMessage';
 
 async function sendMsg(data) {
-  const urlTelegram = 'https://api.telegram.org/bot' + config.telegram.token + '/sendMessage';
 
   try {
     const response = await axios.post(urlTelegram, {
