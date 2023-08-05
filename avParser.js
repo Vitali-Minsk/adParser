@@ -1,12 +1,13 @@
 const axios = require('axios');
-const sendMsg = require('./sendMsg')
+const sendMsg = require('./sendMsg');
+const urls = require('./urls');
 
 let previousAdId = null; // Переменная для хранения предыдущего id объявления
 
 
-async function avParser(url) {
+async function avParser() {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(urls.avUrl);
       const adId = response.data.adverts[0].id;
       const regCountryValue = response.data.adverts[0].properties.find(obj => obj.id === 22)?.value;
       const isAdNew = response.data.adverts[0].originalDaysOnSale === 1;
@@ -33,7 +34,8 @@ async function avParser(url) {
           console.log(mediumPriceMessage)
         } catch (error) {
           console.error('Ошибка при выполнении дополнительного запроса на среднюю цену:', error);
-          sendMsg(adLink);
+          // sendMsg(adLink);
+          console.log(adLink)
         }
       }
       previousAdId = adId; // Сохраняем текущий id в качестве предыдущего

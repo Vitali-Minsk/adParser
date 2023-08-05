@@ -1,11 +1,12 @@
 const axios = require('axios');
-const sendMsg = require('./sendMsg')
+const sendMsg = require('./sendMsg');
+const urls = require('./urls');
 
 let previousAdId = null; // Переменная для хранения предыдущего id объявления
 
-async function kufarParser(url) {
+async function kufarParser() {
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(urls.kufarUrl);
     const adId = response.data.ads[0].ad_id;
     if (adId !== previousAdId) { // Сравниваем текущий и предыдущий id объявления
 
@@ -37,8 +38,8 @@ async function kufarParser(url) {
       // const imageCarUrl ='https://rms7.kufar.by/v1/list_thumbs_2x/' + response.data.ads[0].images[0].path
       const message = `${currentPrice}$ \n ${carParamMessage}, \n ${adLink}`
 
-      console.log('kufar.by: ID', adId)
-      sendMsg(message)
+      console.log(message)
+      // sendMsg(message)
     }
     previousAdId = adId; // Сохраняем текущий id в качестве предыдущего
   } catch (error) {
